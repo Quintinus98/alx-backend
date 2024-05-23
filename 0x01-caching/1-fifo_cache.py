@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-""" BaseCaching module """
+""" FIFO caching """
 
 BaseCaching = __import__("base_caching").BaseCaching
 
 
-class BasicCache(BaseCaching):
-    """A basic cache system"""
+class FIFOCache(BaseCaching):
+    """A FIFO caching system"""
 
     def __init__(self):
         """Initiliaze"""
@@ -16,6 +16,10 @@ class BasicCache(BaseCaching):
         if key == None or item == None:
             return
         self.cache_data[key] = item
+        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+            discarded = next(iter(self.cache_data))
+            del self.cache_data[discarded]
+            print(f"DISCARD: {discarded}")
 
     def get(self, key):
         """Get an item by key"""
